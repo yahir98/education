@@ -1,31 +1,42 @@
 <?php
 require_once "libs/dao.php";
 
+// Elaborar el algoritmo de los solicitado aquí.
 /*
 SELECT `juguetes`.`idjuguetes`,
-    `juguetes`.`nombrejuguete`,
-    `juguetes`.`precio`,
+    `juguetes`.`nomjuguete`,
+    `juguetes`.`preciojuguete`,
     `juguetes`.`estadojuguete`
 FROM `examen`.`juguetes`;
-
 */
-
-
-// Elaborar el algoritmo de los solicitado aquí.
-/* @return Array
-*/
-function obtenerlista()
+/**
+ * Obtiene los registro de la tabla de modas
+ *
+ * @return Array
+ */
+function obtenerListas()
 {
-   $sqlstr = "select `juguetes`.`idjuguetes`,
-       `juguetes`.`nombrejuguete`,
-       `juguetes`.`precio`,
-       `juguetes`.`estadojuguete`
-   FROM `examen`.`juguetes`";
+    $sqlstr = "select `juguetes`.`idjuguetes`,
+              `juguetes`.`nomjuguete`,
+              `juguetes`.`preciojuguete`,
+              `juguetes`.`estadojuguete`
+          from `examen`.`juguetes`";
 
+    $modas = array();
+    $modas = obtenerRegistros($sqlstr);
+    return $modas;
+}
 
-   $juguete = array();
-   $juguete = obtenerRegistros($sqlstr);
-   return $juguete;
+function obtenerJuguetePorId($id)
+{
+  $sqlstr="select `juguetes`.`idjuguetes`,
+            `juguetes`.`nomjuguete`,
+            `juguetes`.`preciojuguete`,
+            `juguetes`.`estadojuguete`
+        from `examen`.`juguetes` where idjuguetes=%d";
+  $juguetes= array();
+  $juguetes=obtenerUnRegistro(sprintf($sqlstr, $id));
+  return $juguetes;
 }
 
 function obtenerEstados()
@@ -40,64 +51,47 @@ function obtenerEstados()
     );
 }
 
+function agregarNuevoJuguete($dscjuguete, $prcjuguete, $estjuguete) {
+    $insSql = "INSERT INTO juguetes(nomjuguete, preciojuguete, estadojuguete)
+      values ('%s', %f, '%s');";
+      if (ejecutarNonQuery(
+          sprintf(
+              $insSql,
+              $dscjuguete,
+              $prcjuguete,
+              $estjuguetes
+          )))
+      {
+        return getLastInserId();
+      } else {
+          return false;
+      }
+}
 
-function obtenerjuguetePorId($id)
+function modificarJuguete($dscjuguete, $prcjuguete, $estjuguete, $idjuguete)
 {
-    $sqlstr = "select `juguetes`.`idjuguetes`,
-        `juguetes`.`nombrejuguete`,
-        `juguetes`.`precio`,
-        `juguetes`.`estadojuguete`
-    FROM `examen`.`juguetes` where idjuguetes=%d";
+    $updSQL = "UPDATE juguetes set nomjuguete='%s', preciojuguete=%f,
+    estadojuguete='%s' where idjuguetes=%d;";
 
-    $juguetes = array();
-    $juguetes = obtenerUnRegistro(sprintf($sqlstr, $id));
-    return $juguetes;
+    return ejecutarNonQuery(
+        sprintf(
+            $updSQL,
+            $dscjuguete,
+            $prcjuguete,
+            $estjuguete,
+            $idjuguete
+        )
+    );
 }
-
-
-function agregarNuevojuguete($dscjuguete, $prcjuguete,$estadojuguetes) {
-   $insSql = "INSERT INTO juguetes(nombrejuguete, precio,estadojuguete)
-     values ('%s', %f, '%s');";
-     if (ejecutarNonQuery(
-         sprintf(
-             $insSql,
-             $dscjuguete,
-             $prcjuguete,
-             $estadojuguetes
-         )))
-     {
-       return getLastInserId();
-     } else {
-         return false;
-     }
-}
-
-function modificarjuguete($dscjuguete, $prcjuguete,$estadojuguetes,$idjuguetes)
+function eliminarJuguete($idjuguete)
 {
-   $updSQL = "UPDATE juguetes set nombrejuguete='%s', precio=%f,
-   estadojuguete='%s' where idjuguetes=%d;";
+    $delSQL = "DELETE FROM juguetes where idjuguetes=%d;";
 
-   return ejecutarNonQuery(
-       sprintf(
-           $updSQL,
-           $dscjuguete,
-           $prcjuguete,
-           $estadojuguetes,
-           $idjuguetes
-       )
-   );
+    return ejecutarNonQuery(
+        sprintf(
+            $delSQL,
+            $idjuguete
+        )
+    );
 }
-function eliminarjuguete($idjuguetes)
-{
-   $delSQL = "DELETE FROM juguetes where $idjuguetes=%d;";
-
-   return ejecutarNonQuery(
-       sprintf(
-           $delSQL,
-           $idjuguetes
-       )
-   );
-}
-
-
 ?>

@@ -1,13 +1,13 @@
 <section>
   <header>
-    <h1>Education</h1>
+    <h1>SEXUAL TOYS</h1>
   </header>
   <main>
     <table class="full-width">
       <thead>
         <tr>
           <th>Cod</th>
-          <th>juguete</th>
+          <th>Juguete</th>
           <th>Precio</th>
           <th>Estado</th>
           <th class="right">
@@ -23,12 +23,12 @@
         {{foreach juguetes}}
         <tr>
           <td>{{idjuguetes}}</td>
-          <td>{{nombrejuguete}}</td>
-          <td>{{precio}}</td>
+          <td>{{nomjuguete}}</td>
+          <td>{{preciojuguete}}</td>
           <td>{{estadojuguete}}</td>
           <td class="right">
             <form action="index.php?page=examenform" method="post">
-              <input type="hidden" name="idmoda" value="{{idjuguetes}}"/>
+              <input type="hidden" name="idjuguetes" value="{{idjuguetes}}"/>
               <input type="hidden" name="xcfrt" value="{{~xcfrt}}" />
               <button type="submit" name="btnDsp">Ver</button>
               <button type="submit" name="btnUpd">Editar</button>
